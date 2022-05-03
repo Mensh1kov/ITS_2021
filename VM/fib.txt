@@ -1,0 +1,31 @@
+input 204
+put 198 1
+put 199 1
+put 200 0
+put 201 1
+put 222 Error!
+del 223
+equ 204 223 224
+ifgoto 224 82
+ifnum 204 220
+not ifgoto 220 82
+num less 204 200 221
+ifgoto 221 82
+num equ 204 200 221
+ifgoto 221 85
+num equ 204 201 221
+ifgoto 221 88
+sum 199 198 199
+sum 200 201 203
+putin 200 201
+putin 201 203
+num less 199 204 226
+ifgoto 226 57
+output 201
+exit
+output 222
+exit
+output 200
+exit
+output 201
+exit

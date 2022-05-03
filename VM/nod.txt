@@ -1,0 +1,59 @@
+goto 19
+exit
+output 410
+goto 2
+output 411
+goto 2
+output 300
+goto 2
+output 301
+goto 2
+input 300
+input 301
+put 410 Error!
+put 411 Not_found!
+put 312 0
+put 311 1
+put 310 0
+del 400
+equ 300 400 404
+ifgoto 404 3
+equ 301 400 404
+ifgoto 404 3
+not ifnum 300 404
+ifgoto 404 3
+not ifnum 301 404
+ifgoto 404 3
+not equ 300 312 404
+ifgoto 404 87
+not equ 301 312 404
+ifgoto 404 87
+output 411
+exit
+num not less 300 312 404
+ifgoto 404 118
+sum 310 311 310
+sum 300 311 300
+num less 300 312 404
+ifgoto 404 96
+putin 300 310
+putin 310 312
+num not less 301 312 404
+ifgoto 404 146
+sum 310 311 310
+sum 301 311 301
+num less 301 312 404
+ifgoto 404 127
+putin 301 310
+equ 300 301 404
+ifgoto 404 11
+num more 300 301 404
+not ifgoto 404 168
+dif 300 301 300
+goto 172
+dif 301 300 301
+equ 300 312 404
+ifgoto 404 15
+equ 301 312 404
+ifgoto 404 11
+goto 153

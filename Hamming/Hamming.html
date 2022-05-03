@@ -1,0 +1,147 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<title>Hamming</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="#2ebaff">
+	<style>
+	.content {
+		margin: 10px;
+		}
+	.row {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	input[type="text"] {
+		background: #8efff9;
+		border: 1px solid #095ae0;
+		font-family: Arial;
+		font-size: 14px;
+		max-width: 100%;
+		outline: none;
+		padding: 2px 10px;
+		width: 10%;
+		box-shadow: none;
+		border-radius: 5px;
+		margin-bottom: 5px;
+	}
+	input[type="button"] {
+		font-weight: bold;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	label {
+		display: block;
+		font-weight: normal;
+		padding: 2px;
+	}
+</style>
+	<div class="content">
+		<h1>Hamming</h1>
+		<div class="row">
+			<label>Original message</label>
+			<input type='text' id='mes' maxlength='4'>
+			<input type='button' onclick='code()' value='Code'>
+			<span id="input_error"></span>
+		</div>
+		<div class="row">
+			<label>Coded message</label>
+			<input type='text' id='mes_cod'>
+			<input type='button' onclick='decode()' value='Decode'>
+			<span id="error"></span>
+		</div>
+		<div class="row">
+			<label>Decoded message</label>
+			<input type='text' id='mes_decod'>
+		</div>
+	</div>
+
+<script>
+	function checkingCodeCharacters(m) {
+		for (let i of m) {
+			if (i !== "0" && i !== "1")
+				return true;
+		}
+		return false;
+	}
+	function code() {
+		let message = document.getElementById('mes').value;
+		if (message.length !== 4) {
+			document.getElementById('input_error').innerText = 'Enter a four-character code that contains only 0 and 1!!!';
+			return;
+		}
+		else if (checkingCodeCharacters(message)) {
+			document.getElementById('input_error').innerText = `Input error: ${message} (use only 0 and 1)!!!`;
+			return;
+		}
+		document.getElementById('input_error').innerText = '';
+		let A = Number(message[0]), B = Number(message[1]), C = Number(message[2]), D = Number(message[3]),
+				x = (A + B + C) % 2,
+				y = (A + B + D) % 2,
+				z = (A + C + D) % 2;
+		document.getElementById('error').innerText = '';
+		document.getElementById('mes_cod').value = message + `${x}${y}${z}`;
+	}
+	function  decode() {
+		let message = document.getElementById('mes_cod').value;
+		if (message.length !== 7) {
+			document.getElementById('error').innerText = 'Enter a seven-character code that contains only 0 and 1!!!'
+			return;
+		}
+		else if (checkingCodeCharacters(message)) {
+			document.getElementById('error').innerText = `Input error: ${message} (use only 0 and 1)!!!`;
+			return;
+		}
+		document.getElementById('error').innerText = '';
+		let A = Number(message[0]), B = Number(message[1]), C = Number(message[2]), D = Number(message[3]),
+				x = message[4], y = message[5], z = message[6];
+		arr1 = [Number(message[4]), Number(message[5]), Number(message[6])],
+				arr2 = [(A + B + C) % 2, (A + B + D) % 2, (A + C + D) % 2],
+				arr3 = ['x', 'y', 'z'],
+				error = '';
+		for (let i = 0; i < 3; i++) {
+			if (arr1[i] !== arr2[i])
+				error += arr3[i];
+		}
+		switch (error) {
+			case '':
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`
+				break;
+			case 'x':
+				document.getElementById('error').innerHTML = `error: ${A}${B}${C}${D}` + "<font color=red>" + x + "</font>" + y + z;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			case 'y':
+				document.getElementById('error').innerHTML = `error: ${A}${B}${C}${D}` + x + "<font color=red>" + y + "</font>" + z;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			case 'z':
+				document.getElementById('error').innerHTML = `error: ${A}${B}${C}${D}` + x + y + "<font color=red>" + z + "</font>";
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			case 'xy':
+				document.getElementById('error').innerHTML = `error: ${A}` + "<font color=red>" + B + "</font>" + `${C}${D}` + x + y + z;
+				B = (B + 1) % 2;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			case 'xz':
+				document.getElementById('error').innerHTML = `error: ${A}${B}` + "<font color=red>" + C + "</font>" + `${D}` + x + y + z;
+				C = (C + 1) % 2;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			case 'yz':
+				document.getElementById('error').innerHTML = `error: ${A}${B}${C}` + "<font color=red>" + D + "</font>" + x + y + z;
+				D = (D + 1) % 2;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+				break;
+			default:
+				document.getElementById('error').innerHTML = `error:` + "<font color=red>" + A + "</font>" + `${B}${C}${D}` + x + y + z;
+				A = (A + 1) % 2;
+				document.getElementById('mes_decod').value = `${A}${B}${C}${D}`;
+		}
+	}
+</script>
+</body>
+</html>
